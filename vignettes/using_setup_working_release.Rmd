@@ -1,0 +1,30 @@
+---
+title: "Using pipfun::setup_working_release()"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using pipfun::setup_working_release()}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Intro
+
+In the new pipeline framework, we can't work in isolation. There are many moving parts and versions, so we always need to work with a reference version. This reference version is what we call the "working release." It is termed "release" because, at the production level, we refer to release versions. It is termed "working" because it is the release version we are currently working on. The "working release" does not need to be an official PIP release; it could be a testing release. However, we must always work within a working release framework.
+
+In this vignette, we explore how to use the `pipfun::setup_working_release()` function to set up a working release in any package.
+
+# Setup 
+Setting a working release is job of the `{pipfun}` package, through the `pipfun::setup_working_release()` function. This function sets up an environment where the working release and many other variables are available for use.
+
+in `{piptest}`, we are fully imporing `{pipfun}`, (by listing `{pipfun}` in Imports in `{piptest}`’s DESCRIPTION file and adding `import(pipfun)` to `{piptest}`’s NAMESPACE file). This last part can be done in the `piptest-package.R` file, which is a file that is automatically created when you use  `usethis::use_package_doc()`.
+
+```{r setup}
+library(piptest)
+```
