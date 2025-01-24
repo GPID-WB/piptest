@@ -9,3 +9,14 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    pipfun (>= 0.1.0.9008)
+Remotes: 
+    PIP-Technical-Team/pipfun@DEV_v2
+RoxygenNote: 7.3.2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/GPID-WB/piptest
+BugReports: https://github.com/GPID-WB/piptest/issues
