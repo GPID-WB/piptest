@@ -12,7 +12,7 @@ LazyData: true
 Imports: 
     pipfun (>= 0.1.0.9008)
 Remotes: 
-    PIP-Technical-Team/pipfun@DEV_v2
+    PIP-Technical-Team/pipfun@internal_testing
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,

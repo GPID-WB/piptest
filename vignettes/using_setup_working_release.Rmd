@@ -21,10 +21,40 @@ In the new pipeline framework, we can't work in isolation. There are many moving
 In this vignette, we explore how to use the `pipfun::setup_working_release()` function to set up a working release in any package.
 
 # Setup 
-Setting a working release is job of the `{pipfun}` package, through the `pipfun::setup_working_release()` function. This function sets up an environment where the working release and many other variables are available for use.
-
-in `{piptest}`, we are fully imporing `{pipfun}`, (by listing `{pipfun}` in Imports in `{piptest}`’s DESCRIPTION file and adding `import(pipfun)` to `{piptest}`’s NAMESPACE file). This last part can be done in the `piptest-package.R` file, which is a file that is automatically created when you use  `usethis::use_package_doc()`.
 
 ```{r setup}
-library(piptest)
+devtools::load_all(".")
+# library(piptest)
+```
+
+Setting up a working release is the job of the `{pipfun}` package, specifically through the `pipfun::setup_working_release()` function. This function configures an environment where the working release and other necessary variables are available for use.
+
+In `{piptest}`, we fully import `{pipfun}` by listing `{pipfun}` in the Imports section of `{piptest}`’s DESCRIPTION file and adding `import(pipfun)` to `{piptest}`’s NAMESPACE file. This can be done in the `piptest-package.R` file, which is automatically created when you use `usethis::use_package_doc()`.
+
+Once you load `{piptest}`, you can access all the functions in `{pipfun}`, including `pipfun::setup_working_release()`.
+
+Working with a release means that you need to inform your R session which release you are working with. Once set, any function from any package in the PIP ecosystem should be configured to work with that release because all the packages should utilize the environment created by `pipfun::setup_working_release()`. You can set the release version by providing a date in the format "%Y%m%d" to the `release` argument. If the date exists, it will be set up. If it does not, `setup_working_release()` will throw an error, indicating that you need to create the release.
+
+
+
+```{r setup-release-error, error=TRUE}
+release <- "20250127"
+pipfun::setup_working_release(release = release)
+
+```
+
+
+For the purpose of this vignette, we will create a new  "TEST" release. 
+```{r setup-release}
+release <- "20250127"
+new_release <- pipfun::new_pip_release(release = release, identity = "TEST" )
+pipfun::setup_working_release(release = release, identity = "TEST")
+```
+
+# The `.pipenv` environment
+
+The `pipfun::setup_working_release()` function creates a `.pipenv` environment in the empty environment. This environment contains the release version and other necessary variables.
+
+```{r pipenv}
+# rlang::is_environment(.pipenv)
 ```
