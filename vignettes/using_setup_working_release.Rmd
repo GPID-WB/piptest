@@ -36,25 +36,54 @@ Once you load `{piptest}`, you can access all the functions in `{pipfun}`, inclu
 Working with a release means that you need to inform your R session which release you are working with. Once set, any function from any package in the PIP ecosystem should be configured to work with that release because all the packages should utilize the environment created by `pipfun::setup_working_release()`. You can set the release version by providing a date in the format "%Y%m%d" to the `release` argument. If the date exists, it will be set up. If it does not, `setup_working_release()` will throw an error, indicating that you need to create the release.
 
 
-
 ```{r setup-release-error, error=TRUE}
 release <- "20250127"
 pipfun::setup_working_release(release = release)
-
 ```
 
+By default, `{pipfun}` will create a new release in the official working directory, provided you have the necessary permissions. While creating new directories is generally straightforward, deleting them can be more problematic. Therefore, the `pipfun::remove_pip_release()` function requires you to specify the directory from which you want to delete the release. This precaution helps prevent accidental deletion of important directories.
+
+For the purpose of this vignette, let's set a temporary directory to work with. This will ensure that any changes we make are isolated and do not affect the official working directory.
 
 For the purpose of this vignette, we will create a new  "TEST" release. 
 ```{r setup-release}
 release <- "20250127"
-new_release <- pipfun::new_pip_release(release = release, identity = "TEST" )
-pipfun::setup_working_release(release = release, identity = "TEST")
+temp_dir <- fs::path(tempdir(), "piptest") |> 
+  fs::dir_create(recurse = TRUE)
+new_release <- pipfun::new_pip_release(release = release,
+                                       identity = "TEST",
+                                       working_dir = temp_dir)
+pipfun::setup_working_release(release = release, 
+                              identity = "TEST")
 ```
 
 # The `.pipenv` environment
 
-The `pipfun::setup_working_release()` function creates a `.pipenv` environment in the empty environment. This environment contains the release version and other necessary variables.
+The `pipfun::setup_working_release()` function creates a `.pipenv` environment in the empty environment. This environment contains the release version and other necessary variables. `{pipfun}` provides a set of functions to interact with the `.pipenv` environment.
 
 ```{r pipenv}
-# rlang::is_environment(.pipenv)
+# Retrieve the entire environment
+env <- pipfun::get_pipenv()
+ls(env)  # List stored keys in .pipenv
+
+# Set a variable in the environment
+pipfun::set_in_pipenv("my_var", 123)
+
+# NOTE: you can omit `pipfun::` because it is fully imported into `piptest`
+get_from_pipenv("my_var")  # Returns 123
+
+pipfun::get_from_pipenv("non_existent")  # Returns NULL instead of error
 ```
+
+
+# Deleting a release
+
+you can delete a release by using the `pipfun::pipfun::remove_pip_release()` function. This function deletes the release and the `.pipenv` environment.
+
+```{r delete-release}
+pipfun::remove_pip_release(release = release, 
+                           identity = "TEST",
+                           working_dir = temp_dir)
+```
+
+
