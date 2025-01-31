@@ -13,5 +13,7 @@ nothing
 greetings using pipfun release management.
 }
 \examples{
+\dontrun{
 hello()
+}
 }
