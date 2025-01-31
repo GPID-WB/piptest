@@ -20,11 +20,11 @@ In the new pipeline framework, we can't work in isolation. There are many moving
 
 In this vignette, we explore how to use the `pipfun::setup_working_release()` function to set up a working release in any package.
 
-# Setup 
+# Setup working release
 
 ```{r setup}
-devtools::load_all(".")
-# library(piptest)
+# devtools::load_all(".")
+library(piptest)
 ```
 
 Setting up a working release is the job of the `{pipfun}` package, specifically through the `pipfun::setup_working_release()` function. This function configures an environment where the working release and other necessary variables are available for use.
@@ -40,6 +40,12 @@ Working with a release means that you need to inform your R session which releas
 release <- "20250127"
 pipfun::setup_working_release(release = release)
 ```
+
+```{r gitcreds}
+creds <- pipfun::get_github_creds()
+creds
+```
+
 
 By default, `{pipfun}` will create a new release in the official working directory, provided you have the necessary permissions. While creating new directories is generally straightforward, deleting them can be more problematic. Therefore, the `pipfun::remove_pip_release()` function requires you to specify the directory from which you want to delete the release. This precaution helps prevent accidental deletion of important directories.
 
@@ -57,7 +63,7 @@ pipfun::setup_working_release(release = release,
                               identity = "TEST")
 ```
 
-# The `.pipenv` environment
+## The `.pipenv` environment
 
 The `pipfun::setup_working_release()` function creates a `.pipenv` environment in the empty environment. This environment contains the release version and other necessary variables. `{pipfun}` provides a set of functions to interact with the `.pipenv` environment.
 
@@ -69,14 +75,13 @@ ls(env)  # List stored keys in .pipenv
 # Set a variable in the environment
 pipfun::set_in_pipenv("my_var", 123)
 
-# NOTE: you can omit `pipfun::` because it is fully imported into `piptest`
-get_from_pipenv("my_var")  # Returns 123
+pipfun::get_from_pipenv("my_var")  # Returns 123
 
 pipfun::get_from_pipenv("non_existent")  # Returns NULL instead of error
 ```
 
 
-# Deleting a release
+## Deleting a release
 
 you can delete a release by using the `pipfun::pipfun::remove_pip_release()` function. This function deletes the release and the `.pipenv` environment.
 
@@ -85,5 +90,36 @@ pipfun::remove_pip_release(release = release,
                            identity = "TEST",
                            working_dir = temp_dir)
 ```
+
+
+# package functions that make use of `.pipenv`
+
+Once the `pipfun::setup_working_release()` has been used and a release version is set in place to work with in your package, you can interact with the `.pipenv` environment in your package functions in different ways. 
+
+The first thing to do is to the get the release version in your functions. 
+
+```{r get-setup-release}
+wrk_release <- pipfun::get_from_pipenv("working_release")
+wrk_release
+```
+
+Now, you can call the working release in any function of your package, as we are doing here with `piptest::hello()` .
+
+You only need to do something like this:
+
+```{r , eval=FALSE}
+hello <- function() {
+  pipfun::get_wrk_release()
+  invisible(wrk_release)
+}
+```
+
+
+And when you call `hell()` you'll be workinf already with the working release. 
+```{r call-hello}
+hello() |> 
+  print()
+```
+
 
 

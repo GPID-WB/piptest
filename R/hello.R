@@ -4,6 +4,10 @@
 #' @export
 #'
 #' @examples
+#' hello()
 hello <- function() {
-  print("Hello, world!")
+  pipfun::get_wrk_release()
+  invisible(wrk_release)
 }
+
+

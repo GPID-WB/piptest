@@ -10,11 +10,12 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    pipfun (>= 0.1.0.9008)
+    pipfun (>= 0.2.0)
 Remotes: 
-    PIP-Technical-Team/pipfun@internal_testing
+    PIP-Technical-Team/pipfun@DEV_v2
 RoxygenNote: 7.3.2
 Suggests: 
+    fs,
     knitr,
     rmarkdown
 VignetteBuilder: knitr

@@ -2,9 +2,27 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @rawNamespace import(collapse, except = fdroplevels)
-#' @rawNamespace import(data.table, except = fdroplevels)
 #' @import pipfun
 ## usethis namespace: end
+
+# Prevent R CMD check from complaining about the use of pipe expressions
+# standard data.table variables
+if (getRversion() >= "2.15.1") {
+  utils::globalVariables(
+    names = c(
+      ".",
+      ".I",
+      ".N",
+      ".SD",
+      ".",
+      "!!",
+      ":=",
+      "wrk_release"
+    ),
+    package = utils::packageName()
+  )
+}
+
 NULL
+
 
